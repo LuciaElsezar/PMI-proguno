@@ -23,6 +23,6 @@ Tratamiento tratamientos[10]= {{"Unas", 7400},{"Limpieza Facial", 9400},
 //---Main------------------------------------------------
 int main()
 {
-    printf("Hello world!\n");
+    //ENTORNO
     return 0;
 }
