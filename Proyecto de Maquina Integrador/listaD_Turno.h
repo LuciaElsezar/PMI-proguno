@@ -37,7 +37,7 @@ void insert_caso_2(Lista_Turno* L, nodo* n){
     aux->next=cur;
 };
 
-//---
+//---Suprimir
 void supress(Lista_Turno* L){
     L.aux -> next = L.cur.next;
     free((void)L.cur);
@@ -53,6 +53,26 @@ int isEmpty(Lista_Turno L){
     };
 };
 
-int isOos()
+int isOos(Lista_Turno L){
+    if(L.cur==NULL){
+        return 1};
+    else {
+        return 0};
+};
+
+void forwards(Lista_Turno* L){
+    L->aux=L->cur;
+    L->cur=L->cur.next;
+};
+
+void reset(Lista_Turno* L){
+    L->cur=L.acc;
+    L->aux=L.acc;
+};
+
+Turno Copy(Lista_Turno L){
+    return L.cur->VIPD;
+};
+
 
 #endif // LISTAD_TURNO_H_INCLUDED
