@@ -25,12 +25,12 @@ int init_turno(Lista* l){ //Inicializa
 
 //--isEmpty / isFull
 
-int isEmpty(Lista l){
+int isEmpty_turno(Lista l){
     if(l.acc == NULL) return 1; //1 si la lista est� vacia
     else return 0;
 };
 
-int isOos(Lista l){
+int isOos_turno(Lista l){
     if(l.cur == NULL) return 1; //1 si el cursor apunta a NULL -> no apunta a un elemento de la lista
     else return 0;
 };
@@ -55,17 +55,17 @@ return 1;
 };
 
 //--Reset
-void reset_turno(Lista_Turno* L){ //Me parece que el reset ya es una funcion, 
+void reset_turno(Lista_Turno* L){ //Me parece que el reset ya es una funcion,
     L->cur=L.acc; // pero en cualquier caso le ponés reset_turno o reset_t, y ya.
     L->aux=L.acc; //Además puede llegar a hacer conflico con el reset de lista cliente.
 };
 
-Turno Copy(Lista_Turno L){
+Turno copy_turno(Lista_Turno L){
     return L.cur->vipd;
 };
 
 //--Supress
-int Supress_turno(Lista* l){
+int supress_turno(Lista* l){
             if(l->aux==l->cur){ //Apuntan al primero o a null
                 l->acc = l->cur->next; //Acc apunta al siguiente
                 free((void*)l->cur); //Se libera a lo que apunta el cur
@@ -81,7 +81,7 @@ int Supress_turno(Lista* l){
 };
 
 //--Forward
-int Forward_turno(Lista *l){
+int forward_turno(Lista *l){
     if(l->cur != l->aux){ //Si aux apunta al anterior del apuntado por el cursor
         l->aux = l->aux->next; //aux avanza al siguiente
     };
