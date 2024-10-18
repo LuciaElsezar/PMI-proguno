@@ -18,6 +18,12 @@ Tratamiento tratamientos[10]= {{"Unas", 7400},{"Limpieza Facial", 9400},
                                 {"Ondas Galvanicas", 123},{"Botox", 123}};
 
 //---Funciones-------------------------------------------
+void CargaTurno();
+//b)Funcion auxiliar que busca los turnos no realizados
+void BuscaTurno();
+//c)Funcion que muestra los turnos de todo un mes
+void Buscar
+
 
 
 //---Main------------------------------------------------
