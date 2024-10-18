@@ -30,20 +30,20 @@ typedef struct{
     Fecha fecha_turno;
     int realizado;
     //Realizado: SI => 1; NO => 0
-}Turno //------------------------------------
+}Turno; //------------------------------------
 
 //---Init y Set ---------------------------
 
-void Init_turno(Turno* t){
-    strcpy(t.id_turno, "0");
+void init_turno(Turno* t){
+    strcpy(t->id_turno, "0");
 };
 
 void Set_id_turno(Turno* t, char id[]){
-    strcpy(t.id_turno, id);
+    strcpy(t->id_turno, id);
 };
 
 void Set_nombre_turno(Turno* t, char nom[]){
-    strcpy(turno.nombre, nom);
+    strcpy(t->nombre, nom);
 };
 
 void Set_id_cliente(Turno* t, int dni){

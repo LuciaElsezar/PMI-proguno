@@ -20,11 +20,11 @@ void Set_dni(Cliente* c, int dni){
 };
 
 void Set_nombre_cliente(Cliente* c, char nom[]){
-    strcpy(c.nombre, nom);
+    strcpy(c->nombre, nom);
 };
 
 void Set_apellido_cliente(Cliente* c, char ap[]){
-    strcpy(c.apellido, ap);
+    strcpy(c->apellido, ap);
 };
 
 void Set_cant_tratamientos(Cliente* c, int t){
