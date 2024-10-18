@@ -1,58 +1,94 @@
 #ifndef LISTAD_TURNO_H_INCLUDED
 #define LISTAD_TURNO_H_INCLUDED
-#include "turno.h"
-
-//---Define nodo-------------------------
+#include <stdlib.h>
+//--Struct nodo
 struct nodo{
-    Turno VIPD;
-    struct nodo *next;
+    int vipd;
+    struct nodo* next;
 };
+
+//--Define tipos Nodo y lista
 typedef struct nodo Nodo;
-
-//--- Define lista de turnos ------------------
 typedef struct{
-    Nodo* acc; //Acceso
-    Nodo* cur; //Cursor
-    Nodo* aux; //Auxiliar
-}Lista_Turno;
+    Nodo* acc;
+    Nodo* cur;
+    Nodo* aux;
+}Lista;
 
-//---Funciones de lista :p------------------
-void init(Lista_Turno* L){
-    L->acc = NULL;
-    L->cur = NULL;
-    L->aux = NULL;
+//--Init
+int init_l(Lista* l){ //Inicializa
+    l->acc = NULL;
+    l->cur = NULL;
+    l->aux = NULL;
+    return 1;
 };
 
-//--- Caso 1: aux y cur apuntan al mismo -----------
-void insert_caso_1(Lista_Turno* L, nodo* n){
-    L->acc = n;
-    n->next = L.cur;
-    L->cur = n;
-    L->aux = n;
-};
-//--- Caso 2: aux y cur NO apuntan al mismo---------
-void insert_caso_2(Lista_Turno* L, nodo* n){
-    n->next = L.cur;
-    L->cur = n;
-    aux->next=cur;
+//--isEmpty / isFull
+
+int isEmpty(Lista l){
+    if(l.acc == NULL) return 1; //1 si la lista está vacia
+    else return 0;
 };
 
-//---
-void supress(Lista_Turno* L){
-    L.aux -> next = L.cur.next;
-    free((void)L.cur);
-    L -> cur = L.aux;
+int isOos(Lista l){
+    if(l.cur == NULL) return 1; //1 si el cursor apunta a NULL -> no apunta a un elemento de la lista
+    else return 0;
 };
 
-int isEmpty(Lista_Turno L){
-    if(L.acc.next==NULL){
-        return 1;
+//--Insert
+int insert_l(Lista* l, int x){
+    Nodo* nuevo = (Nodo*)malloc(sizeof(Nodo)); //Reserva memoria
+    if(nuevo == NULL) return 0; //Si no hay espacio termina
+    nuevo->vipd = x; //asigna el valor recibido al nodo
+    if(l->cur == l->aux){ //Si cur y aux apuntan al primero o null
+        nuevo->next = l->cur; //El siguiente del nuevo va a ser igual al primero
+        l->cur=nuevo;
+        l->aux=nuevo; //El aux
+        l->acc=nuevo; //El acceso ahora apuntan al nuevo elemento
     }
-    else{
-        return 0;
+    else{ //El cursor apunta al siguiente del auxiliar
+        nuevo->next = l->cur; //El sigueinte del nuevo es el cursor
+        l->cur = nuevo; //El cursor apunta al nuevo
+        l->aux->next = nuevo; //El siguiente apunta al nuevo
     };
+return 1;
 };
 
-int isOos()
+//--Ver
+int copy_l(Lista* l){
+    return l->cur->vipd; //Devuelve valor
+};
+
+//--Pop
+int pop_l(Lista* l){
+            if(l->aux==l->cur){ //Apuntan al primero o a null
+                l->acc = l->cur->next; //Acc apunta al siguiente
+                free((void*)l->cur); //Se libera a lo que apunta el cur
+                l->cur = l->acc; //Cursor apunta al aux
+                l->aux = l->acc; //Acc apunta al aux
+            }
+            else{ //El aux apunta al anterior de cur
+                l->aux->next=l->cur->next; //El next del aux ahora apunta al siguiente del que se va a borrar
+                free((void*)l->cur); //Se libera lo que apunta el cur
+                l->cur = l->aux->next; //El cursor se posiciona en el siguiente
+                };
+    return 1; //operacion exitosa
+};
+
+//--Reset
+int reset_l(Lista* l){
+    l->cur = l->acc; //Cursor y aux apuntan al primer elemento
+    l->aux = l->acc;
+    return 1;
+};
+
+//--Forward
+int forward_l(Lista *l){
+    if(l->cur != l->aux){ //Si aux apunta al anterior del apuntado por el cursor
+        l->aux = l->aux->next; //aux avanza al siguiente
+    };
+    l->cur = l->cur->next; //Cursor avanza al siguiente
+    return 1; //operacion exitosa
+};
 
 #endif // LISTAD_TURNO_H_INCLUDED
