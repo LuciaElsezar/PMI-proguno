@@ -17,14 +17,15 @@ void init(Lista_Cliente *L){
 }
 //isoOs-----------------------------
 int isOos(Lista_Cliente L){
-    return(L->cur > L->ultimo  || L->cur<0);//retorna 1 verdadero o 0 caso contrario
+    return(L.cur > L.ultimo  || L.cur<0);//retorna 1 verdadero o 0 caso contrario
 }
 //isEmpty---------------------------
 int isEmpty(Lista_Cliente L){
-  return(L->ultimo == -1);//retorna 1 verdadero o 0 caso contrario
+  return(L.ultimo == -1);//retorna 1 verdadero o 0 caso contrario
+}
 //isFull----------------------------
 int isFull(Lista_Cliente L){
-    return (L->ultimo == (MAX_C-1));//retorna 1 verdadero o 0 caso contrario
+    return (L.ultimo == (MAX_C-1));//retorna 1 verdadero o 0 caso contrario
     }
 
 
@@ -43,7 +44,7 @@ void insert_caso(Lista_Cliente* L,Cliente dato){
 //---supress-------------------------
 void supress(Lista_Cliente* L){
     if(!isEmpty(L) && !isOos(L)){
-        for (int i = L->cursor; i < L->tamaño - 1; i++) {
+        for (int i = L.cur; i < L.ultimo - 1; i++) {
         L->datos[i] = L->datos[i + 1];
     }
     L->ultimo--;
