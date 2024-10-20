@@ -1,80 +1,64 @@
 #ifndef LISTAE_CLIENTE_H_INCLUDED
 #define LISTAE_CLIENTE_H_INCLUDED
+#define MAX_C 10
 //---Define nodo-------------------------
-struct nodo{
-    Cliente VIPD;
-    struct nodo *next;
-};
-typedef struct nodo Nodo;
-
-
-//---Define Lista del Cliente------------
-typedef struct{
-    Nodo* acc; //acceso
-    Nodo* aux; //auxiliar
-    Nodo* cur; //cursor
+typedef struct {
+    int VIPD[MAX_C];
+    int cur;
+    int ultimo;
 }Lista_Cliente;
-
 
 //---Funciones de la lista---------------
 
 //---Inicializador-----------------------
 void init(Lista_Cliente *L){
-    L->acc= NULL;
-    L->aux= NULL;
-    L->cur= NULL;
+    L->cur=0;
+    L->ultimo=0
 }
-//---insert en el que cursor y auxiliar sean iguales
-
-void insert_caso1(Lista_Cliente* L,Nodo* n){
-    L->acc=n;
-    n->next=L->cur;
-    L->cur=n;
-    L->aux=n;
-}
-//---insert caso comun en el que hayga mas de un elemento
-void insert_case2(Lista_Cliente* L,Nodo* n){
-    if(L->aux != NULL){
-    n->next = L->cur;
-    L->cur = n;
-    L->aux->next=L->cur;
-};
-};
-
-//---supress-------------------------
-void supress(Lista_Cliente* L){
-
-    if(L->cur != NULL){
-        if(L->aux != NULL){
-           L->aux->next=L->cur->next; //caso en el que auxiliar y cursor no sean nulos
-        }else{
-        L->acc=L->cur->next;//caso en el que auxiliar sea nulo y cursor no sea nulo (quiere decir que hay un unico elemento a eliminar)
+//isoOs-----------------------------
+int isOos(Lista_Cliente L){
+    if(L->cur > L->ultimo  || L->cur<0){
+        return 1;//fuera de lugar
+    }else{
+    return 0;
     }
-    free(L->cur);//elimina el elemento
-    L->cur=L->aux;//cursor apunta a lo apuntado por auxiliar
-}
 }
 //isEmpty---------------------------
 int isEmpty(Lista_Cliente L){
-    if(L.acc==NULL){
-        return 1;
-    }else{
-    return 0;
+  if(L.ultimo=-1){
+    return 1;
+  }else{
+  return 0;
+  }
     };
-};
 //isFull----------------------------
-//int isFull(Lista_Cliente L){
-//    if(L.)
-//}
-
-//isoOs-----------------------------
-int isOos(Lista_Cliente L){
-    if(L.cur == NULL){
+int isFull(Lista_Cliente L){
+    if(L.ultimo = (MAX_C-1)){
         return 1;
     }else{
     return 0;
     }
+};
+
+//---insert en el que cursor y auxiliar sean iguales
+
+void insert_caso(Lista_Cliente* L,int dato){
+    if(!isFull(L) && !isOos(L)){
+      for(int i=L->ultimo;i> L->cur;i--){
+        L->VIPD[i];=L->VIPD[i-1];
+      }
+      L->VIPD[L->cur]=dato;
+      L->ultimo++;
+    }
 }
 
-
+//---supress-------------------------
+void supress(Lista_Cliente* L){
+    if(!isEmpty(L) && !isOos(L)){
+        for (int i = L->cursor; i < L->tamaño - 1; i++) {
+        L->datos[i] = L->datos[i + 1];
+    }
+    L->tamaño--;
+    }
+};
 #endif // LISTAE_CLIENTE_H_INCLUDED
