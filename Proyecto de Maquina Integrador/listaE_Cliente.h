@@ -3,7 +3,7 @@
 #define MAX_C 10
 //---Define nodo-------------------------
 typedef struct {
-    int VIPD[MAX_C];
+    Cliente VIPD[MAX_C];
     int cur;
     int ultimo;
 }Lista_Cliente;
@@ -13,39 +13,27 @@ typedef struct {
 //---Inicializador-----------------------
 void init(Lista_Cliente *L){
     L->cur=0;
-    L->ultimo=0
+    L->ultimo=-1;
 }
 //isoOs-----------------------------
 int isOos(Lista_Cliente L){
-    if(L->cur > L->ultimo  || L->cur<0){
-        return 1;//fuera de lugar
-    }else{
-    return 0;
-    }
+    return(L->cur > L->ultimo  || L->cur<0);//retorna 1 verdadero o 0 caso contrario
 }
 //isEmpty---------------------------
 int isEmpty(Lista_Cliente L){
-  if(L.ultimo=-1){
-    return 1;
-  }else{
-  return 0;
-  }
-    };
+  return(L->ultimo == -1);//retorna 1 verdadero o 0 caso contrario
 //isFull----------------------------
 int isFull(Lista_Cliente L){
-    if(L.ultimo = (MAX_C-1)){
-        return 1;
-    }else{
-    return 0;
+    return (L->ultimo == (MAX_C-1));//retorna 1 verdadero o 0 caso contrario
     }
-};
+
 
 //---insert en el que cursor y auxiliar sean iguales
 
-void insert_caso(Lista_Cliente* L,int dato){
+void insert_caso(Lista_Cliente* L,Cliente dato){
     if(!isFull(L) && !isOos(L)){
       for(int i=L->ultimo;i> L->cur;i--){
-        L->VIPD[i];=L->VIPD[i-1];
+        L->VIPD[i];=L->VIPD[i-1];//desplaza los elementos hacia la izquierda
       }
       L->VIPD[L->cur]=dato;
       L->ultimo++;
@@ -58,7 +46,7 @@ void supress(Lista_Cliente* L){
         for (int i = L->cursor; i < L->tamaño - 1; i++) {
         L->datos[i] = L->datos[i + 1];
     }
-    L->tamaño--;
+    L->ultimo--;
     }
-};
+}
 #endif // LISTAE_CLIENTE_H_INCLUDED
