@@ -3,7 +3,7 @@
 
 //--- Struct Cliente -----------------
 typedef struct{
-    int dni;
+    long int dni;
     char nombre[26];
     char apellido[26];
     int cant_tratamientos;
