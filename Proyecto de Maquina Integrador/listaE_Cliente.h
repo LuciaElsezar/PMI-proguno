@@ -1,7 +1,7 @@
 #ifndef LISTAE_CLIENTE_H_INCLUDED
 #define LISTAE_CLIENTE_H_INCLUDED
 #include "cliente.h"
-//---------------LISTA ESTÁTICA DE CLIENTES(PILA?)-------------
+//---------------LISTA ESTï¿½TICA DE CLIENTES(PILA?)-------------
 
 typedef struct{
 

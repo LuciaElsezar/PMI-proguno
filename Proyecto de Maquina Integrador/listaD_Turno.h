@@ -1,9 +1,10 @@
 #ifndef LISTAD_TURNO_H_INCLUDED
 #define LISTAD_TURNO_H_INCLUDED
+#include "turno.h"
 #include <stdlib.h>
 //--Struct nodo
 struct nodo{
-    int vipd;
+    Turno vipd;
     struct nodo* next;
 };
 
@@ -26,7 +27,7 @@ int init_turno(Lista* l){ //Inicializa
 //--isEmpty / isFull
 
 int isEmpty_turno(Lista l){
-    if(l.acc == NULL) return 1; //1 si la lista est� vacia
+    if(l.acc == NULL) return 1; //1 si la lista esta vacia
     else return 0;
 };
 
@@ -36,10 +37,11 @@ int isOos_turno(Lista l){
 };
 
 //--Insert
-int insert_turno(Lista* l, int x){
+int insert_turno(Lista* l, Turno T){
     Nodo* nuevo = (Nodo*)malloc(sizeof(Nodo)); //Reserva memoria
     if(nuevo == NULL) return 0; //Si no hay espacio termina
-    nuevo->vipd = x; //asigna el valor recibido al nodo
+    nuevo->vipd = T;
+
     if(l->cur == l->aux){ //Si cur y aux apuntan al primero o null
         nuevo->next = l->cur; //El siguiente del nuevo va a ser igual al primero
         l->cur=nuevo;
@@ -55,9 +57,13 @@ return 1;
 };
 
 //--Reset
-void reset_turno(Lista_Turno* L){ //Me parece que el reset ya es una funcion,
-    L->cur=L.acc; // pero en cualquier caso le ponés reset_turno o reset_t, y ya.
-    L->aux=L.acc; //Además puede llegar a hacer conflico con el reset de lista cliente.
+void reset_turno(Lista_Turno* L){
+    L->cur=L.acc;
+    L->aux=L.acc;
+};
+
+Turno copy_turno(Lista_Turno L){
+    return L.cur->vipd;
 };
 
 Turno copy_turno(Lista_Turno L){
@@ -88,5 +94,4 @@ int forward_turno(Lista *l){
     l->cur = l->cur->next; //Cursor avanza al siguiente
     return 1; //operacion exitosa
 };
-
 #endif // LISTAD_TURNO_H_INCLUDED
