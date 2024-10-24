@@ -31,7 +31,11 @@ void Set_cant_tratamientos(Cliente* c, int t){
     c->cant_tratamientos=t;
 };
 
-//--- Set ---------------------------
+void Set_nivel(Cliente* c, int n){
+	c->nivel = n;
+};
+
+//--- Get ---------------------------
 void Get_dni(Cliente c){
     return c.dni;
 };
