@@ -1,7 +1,7 @@
 #ifndef LISTACLIENTE_H_INCLUDED
 #define LISTACLIENTE_H_INCLUDED
 #include "cliente.h"
-#define MAX_C 10
+#define MAX_C 200
 //---Define nodo-------------------------
 typedef struct {
     Cliente VIPD[MAX_C];
@@ -35,8 +35,8 @@ int isFull_cliente(Lista_Cliente L){
 
 //---insert en el que cursor y auxiliar sean iguales
 int insert_cliente(Lista_Cliente* L, Cliente dato){
+	init_cliente(&L->VIPD[L->ultimo+1]);
     if(isEmpty_cliente(*L)){
-      L->ultimo++;
       L->cur++;
 	}
 	else{
@@ -45,6 +45,7 @@ int insert_cliente(Lista_Cliente* L, Cliente dato){
 			L->VIPD[i + 1] = L->VIPD[i]; // Desplaza a la derecha
 		};
 	};
+	L->ultimo++;
 	L->VIPD[L->cur] = dato;
 return 1;
 };

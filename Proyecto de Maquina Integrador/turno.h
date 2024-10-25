@@ -3,6 +3,10 @@
 #include <string.h>
 #define TAM_NOMBRE 26
 #define TAM_ID_TURNO 9
+#define DEBITO 1
+#define CREDITO 2
+#define QR 3
+#define EFECTIVO 4
 
 //--- Definir Struct Fecha -------------------
 typedef struct{
@@ -20,11 +24,15 @@ typedef struct{
 typedef struct{
     char id_turno[TAM_ID_TURNO];
     char nombre[TAM_NOMBRE];
-    int id_cliente;
+    long int id_cliente;
     int tratamientos[10];
     int forma_pago;
     //Formas de pago:
     /*
+    1: debito
+    2: credito
+    3: QR
+    4: efectivo
     */
     float total;
     Fecha fecha_turno;

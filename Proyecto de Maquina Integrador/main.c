@@ -77,9 +77,46 @@ void mostrar_turno_tratamiento(){
 }
 
 //n)---Realizar una precarga automática al iniciar el programa de los clientes a la lista de Clientes. Debe contener al menos 10 clientes.
-void precarga_clientes(){
-	printf("Se precargaron los turnos\n");
-}
+void precarga_clientes(Lista_Cliente* l, FILE* f){
+	Cliente cliente_aux;
+	int n = 0;
+	while(!feof(f)&&!isFull_cliente(*l)){
+		fscanf(f, " %ld", &cliente_aux.dni);
+		fscanf(f, " %[^\n]s", cliente_aux.nombre);
+		fscanf(f, " %[^\n]s", cliente_aux.apellido);
+		fscanf(f, " %d", &cliente_aux.cant_tratamientos);
+		fscanf(f, " %d", &cliente_aux.nivel);
+		insert_cliente(l,cliente_aux);
+		++n;
+	};
+	if(!feof(f)) printf("Se alcanzo el limite de clientes antes de finalizar la precarga.\n");
+	else
+		if(n == 0)printf("No hay clientes para precargar.\n");
+		else printf("Se precargaron los clientes exitosamente.\n");
+	system("pause");
+};
+
+void precarga_turnos(Lista_Turno* l, FILE* f){
+	Turno turno_aux;
+	int n = 0, i;
+	while(!feof(f)){
+		fscanf(f, " %[^\n]s", turno_aux.id_turno);
+		fscanf(f, " %[^\n]s", turno_aux.nombre);
+		fscanf(f, " %ld", &turno_aux.id_cliente);
+		for(i = 0; i < 10; i++){
+			fscanf(f, " %d", &turno_aux.tratamientos[i]);
+		};
+		fscanf(f, " %d", &turno_aux.forma_pago);
+		fscanf(f, " %f", &turno_aux.total);
+		fscanf(f, "%d-%d-%d %dhs", &turno_aux.fecha_turno.dia,&turno_aux.fecha_turno.mes, &turno_aux.fecha_turno.anio, &turno_aux.fecha_turno.hora);
+		fscanf(f, " %d", &turno_aux.realizado);
+		insert_turno(l,turno_aux);
+		++n;
+	};
+	if(n == 0)printf("No hay clientes para precargar.\n");
+	else printf("Se precargaron los turnos exitosamente.\n");
+	system("pause");
+};
 
 //ñ)---Muestra los clientes almacenados en lista clientes
 void mostrar_lista_clientes(){
@@ -106,18 +143,6 @@ int main()
 {
 
 //--Inicializa Variables------------------------------
-	//--Listas
-    Lista_Turno lista_turno;
-    init_lista_turno(&lista_turno);
-    Turno turno_aux;
-    init_turno(&turno_aux);
-
-    Lista_Cliente lista_cliente;
-    init_lista_cliente(&lista_cliente);
-    Cliente cliente_aux;
-    init_cliente(&cliente_aux);
-
-    Tratamiento tratamientos[10];
 
     //--Variables simples
     char aux[500], tecla;
@@ -125,15 +150,45 @@ int main()
 
     //--Abre archivos
     FILE *fp_clientes, *fp_turnos, *fp_menu, *fp_tratamientos;
-    fp_clientes= fopen("clientes.txt", "w+");
-    fp_turnos = fopen("turnos.txt", "w+");
+    fp_clientes= fopen("clientes.txt", "r+");
+    if(fp_clientes == NULL){
+		printf("Error al abrir clientes.txt.");
+		exit(1);
+    };
+    fp_turnos = fopen("turnos.txt", "r+");
+    if(fp_turnos == NULL){
+		printf("Error al abrir turnos.txt.");
+		exit(1);
+    };
     fp_tratamientos = fopen("tratamientos.txt", "r");
+    if(fp_tratamientos == NULL){
+		printf("Error al abrir tratamientos.txt.");
+		exit(1);
+    };
     fp_menu = fopen("menu.txt", "r");
+    if(fp_menu == NULL){
+		printf("Error al abrir menu.txt.");
+		exit(1);
+    };
+
+	//--Listas
+    Lista_Turno lista_turnos;
+    init_lista_turno(&lista_turnos);
+
+    Lista_Cliente lista_clientes;
+    init_lista_cliente(&lista_clientes);
+
+    Tratamiento tratamientos[10];
 //-----------------------------------------------------
+//---Carga datos de los archivos
+
 	for(i = 0; i < 10; i++){ //Lee tratamientos
 	fscanf(fp_tratamientos," %[^\n]s", tratamientos[i].nombre);
 	fscanf(fp_tratamientos, " %f", &tratamientos[i].precio);
 	};
+
+	precarga_clientes(&lista_clientes,fp_clientes);
+	precarga_turnos(&lista_turnos, fp_turnos);
 //--Menu----------------------------------------------
 do{
 	opc = 1;
@@ -224,9 +279,9 @@ do{
 //------------------------------------------------------
 
 //--Libera memoria y cierra archivos--------------------
-    reset_turno(&lista_turno);
-    while(lista_turno.acc != NULL){
-        supress_turno(&lista_turno);
+    reset_turno(&lista_turnos);
+    while(lista_turnos.acc != NULL){
+        supress_turno(&lista_turnos);
     };
     fclose(fp_clientes);
     fclose(fp_turnos);

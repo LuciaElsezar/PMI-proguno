@@ -1,11 +1,12 @@
 #ifndef CLIENTE_H_INCLUDED
 #define CLIENTE_H_INCLUDED
+#define TAM_NOMBRE 26
 
 //--- Struct Cliente -----------------
 typedef struct{
     long int dni;
-    char nombre[26];
-    char apellido[26];
+    char nombre[TAM_NOMBRE];
+    char apellido[TAM_NOMBRE];
     int cant_tratamientos;
     int nivel;
 }Cliente;
