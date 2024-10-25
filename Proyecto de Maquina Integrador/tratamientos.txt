@@ -1,0 +1,20 @@
+Unas
+7400
+Limpieza Facial
+9400
+Masajes
+7500
+Manicura
+10000
+Pedicura
+12000
+Depilacion
+8000
+Pestanias
+8700
+Peeling
+22000
+Ondas Galvanicas
+12300
+Botox
+14500

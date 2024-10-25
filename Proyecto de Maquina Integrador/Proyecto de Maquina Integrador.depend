@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1729817650 source:c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\main.c
+	<stdio.h>
+	<stdlib.h>
+	"listaD_turno.h"
+	"listaE_Cliente.h"
+	<conio.h>
+
+1729813828 c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\listad_turno.h
+	"turno.h"
+	<stdlib.h>
+
+1729814161 c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\turno.h
+	<string.h>
+
+1729813867 c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\listae_cliente.h
+	"cliente.h"
+
+1729814012 c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\cliente.h
+

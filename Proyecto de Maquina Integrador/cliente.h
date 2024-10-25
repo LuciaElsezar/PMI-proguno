@@ -11,7 +11,7 @@ typedef struct{
 }Cliente;
 
 //--- Init y Set ---------------------
-void init(Cliente* c){
+void init_cliente(Cliente* c){
     c-> dni = 0;
 };
 
@@ -36,7 +36,7 @@ void Set_nivel(Cliente* c, int n){
 };
 
 //--- Get ---------------------------
-void Get_dni(Cliente c){
+int Get_dni(Cliente c){
     return c.dni;
 };
 
@@ -64,5 +64,9 @@ else{
 
 int Get_cant_tratamientos(Cliente c){
     return c.cant_tratamientos;
+};
+
+int Get_nivel(Cliente c){
+	return c.nivel;
 };
 #endif // CLIENTE_H_INCLUDED

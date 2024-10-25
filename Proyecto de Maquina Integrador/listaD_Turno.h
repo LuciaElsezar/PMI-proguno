@@ -2,6 +2,7 @@
 #define LISTAD_TURNO_H_INCLUDED
 #include "turno.h"
 #include <stdlib.h>
+
 //--Struct nodo
 struct nodo{
     Turno vipd;
@@ -14,30 +15,27 @@ typedef struct{
     Nodo* acc;
     Nodo* cur;
     Nodo* aux;
-}Lista;
+}Lista_Turno;
 
 //--Init
-int init_turno(Lista* l){ //Inicializa
+int init_lista_turno(Lista_Turno* l){ //Inicializa
     l->acc = NULL;
     l->cur = NULL;
     l->aux = NULL;
     return 1;
 };
 
-//--isEmpty / isFull
-
-int isEmpty_turno(Lista l){
-    if(l.acc == NULL) return 1; //1 si la lista esta vacia
-    else return 0;
+//--isEmpty / isOos
+int isEmpty_turno(Lista_Turno l){
+    return l.acc == NULL; //1 si la lista esta vacia
 };
 
-int isOos_turno(Lista l){
-    if(l.cur == NULL) return 1; //1 si el cursor apunta a NULL -> no apunta a un elemento de la lista
-    else return 0;
+int isOos_turno(Lista_Turno l){
+    return l.cur == NULL; //1 si el cursor apunta a NULL -> no apunta a un elemento de la lista
 };
 
 //--Insert
-int insert_turno(Lista* l, Turno T){
+int insert_turno(Lista_Turno* l, Turno T){
     Nodo* nuevo = (Nodo*)malloc(sizeof(Nodo)); //Reserva memoria
     if(nuevo == NULL) return 0; //Si no hay espacio termina
     nuevo->vipd = T;
@@ -58,20 +56,17 @@ return 1;
 
 //--Reset
 void reset_turno(Lista_Turno* L){
-    L->cur=L.acc;
-    L->aux=L.acc;
+    L->cur=L->acc;
+    L->aux=L->acc;
 };
 
-Turno copy_turno(Lista_Turno L){
-    return L.cur->vipd;
-};
-
+//---Copy
 Turno copy_turno(Lista_Turno L){
     return L.cur->vipd;
 };
 
 //--Supress
-int supress_turno(Lista* l){
+int supress_turno(Lista_Turno* l){
             if(l->aux==l->cur){ //Apuntan al primero o a null
                 l->acc = l->cur->next; //Acc apunta al siguiente
                 free((void*)l->cur); //Se libera a lo que apunta el cur
@@ -87,7 +82,7 @@ int supress_turno(Lista* l){
 };
 
 //--Forward
-int forward_turno(Lista *l){
+int forward_turno(Lista_Turno *l){
     if(l->cur != l->aux){ //Si aux apunta al anterior del apuntado por el cursor
         l->aux = l->aux->next; //aux avanza al siguiente
     };

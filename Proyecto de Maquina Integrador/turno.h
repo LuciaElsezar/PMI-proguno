@@ -35,7 +35,7 @@ typedef struct{
 //---Init y Set ---------------------------
 
 void init_turno(Turno* t){
-    strcpy(t->id_turno, "0");
+    strcpy(t->id_turno, "a0");
 };
 
 void Set_id_turno(Turno* t, char id[]){
