@@ -352,10 +352,9 @@ do{
 			mostrar_turno_norealizado();
 	break;
 		case 16:
-
 	break;
 	default:
-		printf("Como elegiste esta opcion??");
+		printf("Como elegiste esta opcion??"); //No se puede elegir jaja
 		return 666;
     };
     system("pause");
@@ -364,7 +363,7 @@ do{
 
 //--Libera memoria y cierra archivos--------------------
     reset_turno(&lista_turnos);
-    while(lista_turnos.acc != NULL){
+    while(!isEmpty_turno(lista_turnos)){
         supress_turno(&lista_turnos);
     };
     fclose(fp_clientes);
