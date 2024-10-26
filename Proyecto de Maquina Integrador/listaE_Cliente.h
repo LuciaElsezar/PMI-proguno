@@ -35,7 +35,7 @@ int isFull_cliente(Lista_Cliente L){
 
 //---insert en el que cursor y auxiliar sean iguales
 int insert_cliente(Lista_Cliente* L, Cliente dato){
-	init_cliente(&L->VIPD[L->ultimo+1]);
+	//init_cliente(&L->VIPD[L->ultimo+1]);
     if(isEmpty_cliente(*L)){
       L->cur++;
 	}

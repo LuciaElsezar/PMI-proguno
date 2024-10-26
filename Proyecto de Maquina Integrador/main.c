@@ -23,7 +23,7 @@ void buscar_turno(){
 
 //c)---Funcion que muestra los turnos de todo un mes ordenado por fecha
 void mostrar_turno_fecha(Lista_Turno *l, int m, Tratamiento t[]){
-	int d=1,h,k, cant_dias, n;
+	int d=1,h,k, cant_dias, n=0, o= 0;
 	char* p;
 	if(m==11){ //Noviembre 30 d
 		cant_dias = 30;
@@ -38,6 +38,7 @@ void mostrar_turno_fecha(Lista_Turno *l, int m, Tratamiento t[]){
 				if(Get_mes(l->cur->vipd)==m){
 					if(Get_dia(l->cur->vipd)==d){
 						if(Get_hora(l->cur->vipd)==h){ //Turno coincide en fecha y hora
+
 							printf(">>- - - - - - - - - - -\n");
 							if((p = Get_id_turno(l->cur->vipd)))
 								printf(">>Turno: %s\n", p);
@@ -58,9 +59,8 @@ void mostrar_turno_fecha(Lista_Turno *l, int m, Tratamiento t[]){
 								};
 							};
 							printf(">>Se realizo el turno: ");
-							if(Get_realizado(l->cur->vipd)) printf("Si.\n");
-							else printf("No.\n");
-							n++;
+							if(Get_realizado(l->cur->vipd)){printf("Si.\n");n++;}
+							else {printf("No.\n");o++;};
 						};
 					};
 				};
@@ -70,7 +70,8 @@ void mostrar_turno_fecha(Lista_Turno *l, int m, Tratamiento t[]){
 	};
 	if(!n)printf("No se realizaron turnos en el mes dado.\n");
 	else printf("Se realizaron un total de %d turnos en el mes.\n",n);
-	system("pause");
+	if(!o)printf("No quedan turnos sin realizar.\n");
+	else printf("Quedan %d turnos por realizar.\n", o);
 };
 
 //d)---Funcion que muestra los turno por nombre de cliente

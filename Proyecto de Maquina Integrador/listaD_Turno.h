@@ -39,16 +39,13 @@ int insert_turno(Lista_Turno* l, Turno T){
     Nodo* nuevo = (Nodo*)malloc(sizeof(Nodo)); //Reserva memoria
     if(nuevo == NULL) return 0; //Si no hay espacio termina
     nuevo->vipd = T;
-
+	nuevo->next = l->cur; //El siguiente del nuevo va a ser igual al primero
+	l->cur = nuevo; //El cursor apunta al nuevo
     if(l->cur == l->aux){ //Si cur y aux apuntan al primero o null
-        nuevo->next = l->cur; //El siguiente del nuevo va a ser igual al primero
-        l->cur=nuevo;
         l->aux=nuevo; //El aux
         l->acc=nuevo; //El acceso ahora apuntan al nuevo elemento
     }
     else{ //El cursor apunta al siguiente del auxiliar
-        nuevo->next = l->cur; //El sigueinte del nuevo es el cursor
-        l->cur = nuevo; //El cursor apunta al nuevo
         l->aux->next = nuevo; //El siguiente apunta al nuevo
     };
 return 1;
@@ -67,17 +64,17 @@ Turno copy_turno(Lista_Turno L){
 
 //--Supress
 int supress_turno(Lista_Turno* l){
-            if(l->aux==l->cur){ //Apuntan al primero o a null
-                l->acc = l->cur->next; //Acc apunta al siguiente
-                free((void*)l->cur); //Se libera a lo que apunta el cur
-                l->cur = l->acc; //Cursor apunta al aux
-                l->aux = l->acc; //Acc apunta al aux
-            }
-            else{ //El aux apunta al anterior de cur
-                l->aux->next=l->cur->next; //El next del aux ahora apunta al siguiente del que se va a borrar
-                free((void*)l->cur); //Se libera lo que apunta el cur
-                l->cur = l->aux->next; //El cursor se posiciona en el siguiente
-                };
+	if(l->aux==l->cur){ //Apuntan al primero o a null
+		l->acc = l->cur->next; //Acc apunta al siguiente
+		free((void*)l->cur); //Se libera a lo que apunta el cur
+		l->cur = l->acc; //Cursor apunta al aux
+		l->aux = l->acc; //Acc apunta al aux
+	}
+	else{ //El aux apunta al anterior de cur
+		l->aux->next=l->cur->next; //El next del aux ahora apunta al siguiente del que se va a borrar
+		free((void*)l->cur); //Se libera lo que apunta el cur
+		l->cur = l->aux->next; //El cursor se posiciona en el siguiente
+	};
     return 1; //operacion exitosa
 };
 
