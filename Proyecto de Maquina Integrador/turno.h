@@ -23,7 +23,7 @@ typedef struct{
 //--- Definir Struct Turno ------------------
 typedef struct{
     char id_turno[TAM_ID_TURNO];
-    char nombre[TAM_NOMBRE];
+    char nombre_cliente_turno[TAM_NOMBRE];
     long int id_cliente;
     int tratamientos[10];
     int forma_pago;
@@ -51,7 +51,7 @@ void Set_id_turno(Turno* t, char id[]){
 };
 
 void Set_nombre_turno(Turno* t, char nom[]){
-    strcpy(t->nombre, nom);
+    strcpy(t->nombre_cliente_turno, nom);
 };
 
 void Set_id_cliente(Turno* t, int dni){
@@ -91,6 +91,7 @@ if(p==NULL){
     exit(1);
 }
 else{
+	strcpy(p,t.id_turno);
     return p;
 };
 };
@@ -102,13 +103,14 @@ if(p==NULL){
     exit(1);
 }
 else{
+	strcpy(p,t.nombre_cliente_turno);
     return p;
 };
 };
 
 //Hacer un if en main para verificar si se salió de la funcion :p
 
-int Get_id_cliente(Turno t){
+long int Get_id_cliente(Turno t){
     return t.id_cliente;
 };
 
@@ -118,6 +120,10 @@ int Get_tratamiento(Turno t, int i){
 
 int Get_forma_pago(Turno t){
     return t.forma_pago;
+};
+
+float Get_total(Turno t){
+	return t.total;
 };
 
 int Get_dia(Turno t){

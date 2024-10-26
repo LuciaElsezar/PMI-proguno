@@ -22,9 +22,56 @@ void buscar_turno(){
 }
 
 //c)---Funcion que muestra los turnos de todo un mes ordenado por fecha
-void mostrar_turno_fecha(){
-	printf("Se mostraron los turnos por fecha\n");
-}
+void mostrar_turno_fecha(Lista_Turno *l, int m, Tratamiento t[]){
+	int d=1,h,k, cant_dias, n;
+	char* p;
+	if(m==11){ //Noviembre 30 d
+		cant_dias = 30;
+	}
+	else{ //Diciembre 31 d
+		cant_dias = 31;
+	};
+	for(;d<cant_dias; d++){ //Recorre por los 30 o 31 dias
+		for(h=9;h<20;h++){ //Recore por las horas
+			reset_turno(l);
+			while(!isOos_turno(*l)){
+				if(Get_mes(l->cur->vipd)==m){
+					if(Get_dia(l->cur->vipd)==d){
+						if(Get_hora(l->cur->vipd)==h){ //Turno coincide en fecha y hora
+							printf(">>- - - - - - - - - - -\n");
+							if((p = Get_id_turno(l->cur->vipd)))
+								printf(">>Turno: %s\n", p);
+							else
+								printf(">>Error al obtener el turno.\n");
+							free((void*)p);
+							if((p = Get_nombre_turno(l->cur->vipd)))
+								printf(">>Nombre del Cliente: %s\n", p);
+							else
+								printf(">>Error al obtener el nombre del cliente.\n");
+							free((void*)p);
+							printf(">>Id del Cliente: %ld\n", Get_id_cliente(l->cur->vipd));
+							printf(">>Fecha del turno: %d-%d-%d, %dhs.\n", Get_dia(l->cur->vipd), Get_mes(l->cur->vipd), Get_anio(l->cur->vipd), Get_hora(l->cur->vipd));
+							printf(">>Tratamientos del turno:\n");
+							for(k=0;k<10;k++){
+								if(Get_tratamiento(l->cur->vipd,k)){
+									printf("   >>%s\n", t[k].nombre);
+								};
+							};
+							printf(">>Se realizo el turno: ");
+							if(Get_realizado(l->cur->vipd)) printf("Si.\n");
+							else printf("No.\n");
+							n++;
+						};
+					};
+				};
+			forward_turno(l);
+			};
+		};
+	};
+	if(!n)printf("No se realizaron turnos en el mes dado.\n");
+	else printf("Se realizaron un total de %d turnos en el mes.\n",n);
+	system("pause");
+};
 
 //d)---Funcion que muestra los turno por nombre de cliente
 void mostrar_turno_nombre(){
@@ -37,9 +84,18 @@ void mostrar_turno_idCliente(){
 }
 
 //f)---Calcula la ganancia mensual considerando los turnos ya realizados(recursiva)
-void ganancia_mensual(){
-	printf("Se calculo la ganancia mensual de forma recursiva\n");
-}
+float ganancia_mensual(Lista_Turno* l, Tratamiento t[], int m, float g){
+	if((isOos_turno(*l))){
+		return 0;
+	}
+	else{
+		if(Get_realizado(l->cur->vipd)){
+			g+= Get_total(l->cur->vipd);
+		};
+		forward_turno(l);
+		return g + ganancia_mensual(l,t,m,g);
+	};
+};
 
 //g)---Muestra los turnos de la lista de turnos
 void mostrar_lista_turnos(){
@@ -92,7 +148,7 @@ void precarga_clientes(Lista_Cliente* l, FILE* f){
 	if(!feof(f)) printf("Se alcanzo el limite de clientes antes de finalizar la precarga.\n");
 	else
 		if(n == 0)printf("No hay clientes para precargar.\n");
-		else printf("Se precargaron los clientes exitosamente.\n");
+		else printf("Se precargaron %d clientes exitosamente.\n", n);
 	system("pause");
 };
 
@@ -101,7 +157,7 @@ void precarga_turnos(Lista_Turno* l, FILE* f){
 	int n = 0, i;
 	while(!feof(f)){
 		fscanf(f, " %[^\n]s", turno_aux.id_turno);
-		fscanf(f, " %[^\n]s", turno_aux.nombre);
+		fscanf(f, " %[^\n]s", turno_aux.nombre_cliente_turno);
 		fscanf(f, " %ld", &turno_aux.id_cliente);
 		for(i = 0; i < 10; i++){
 			fscanf(f, " %d", &turno_aux.tratamientos[i]);
@@ -114,7 +170,7 @@ void precarga_turnos(Lista_Turno* l, FILE* f){
 		++n;
 	};
 	if(n == 0)printf("No hay clientes para precargar.\n");
-	else printf("Se precargaron los turnos exitosamente.\n");
+	else printf("Se precargaron %d turnos exitosamente.\n", n);
 	system("pause");
 };
 
@@ -138,15 +194,32 @@ void mostrar_turno_norealizado(){
 	printf("Se mostraron los turnos no realizados\n");
 }
 
+//---Adicionales ---------------------------------------
+//---Funcion para ingresar un mes valido:
+int ingresar_mes(int* m){
+	*m = 0;
+	do{
+		system("cls");
+		printf(">>Ingrese el mes cuyos turnos desee mostrar:\n");
+		scanf(" %d", m);
+		if(*m != 11 && *m != 12){
+			printf("Ingreso un mes invalido. Reintente.\n");
+			system("pause");
+		};
+	}while(*m != 11 && *m != 12);
+	return *m;
+};
+
+
 //---Main------------------------------------------------
-int main()
-{
+int main(){
 
 //--Inicializa Variables------------------------------
 
     //--Variables simples
-    char aux[500], tecla;
-    int opc = 1, i;
+    char arr_aux[500], tecla;
+    int opc = 1, i, mes, int_aux_1, int_aux_2;
+    float float_aux_1;
 
     //--Abre archivos
     FILE *fp_clientes, *fp_turnos, *fp_menu, *fp_tratamientos;
@@ -199,13 +272,13 @@ do{
 		i = 0;
 		//Texto mostrado en consola para bienvenida
         while(!feof(fp_menu)){
-			fscanf(fp_menu, "\n%[^\n]s", aux);
+			fscanf(fp_menu, "\n%[^\n]s", arr_aux);
         	if(opc + 2 == i){
-				aux[55] = '<';
-				aux[56] = '<';
-				aux[57] = '-';
+				arr_aux[55] = '<';
+				arr_aux[56] = '<';
+				arr_aux[57] = '-';
         	};
-			printf("%s\n", aux);
+			printf("%s\n", arr_aux);
 			++i;
 		};
 
@@ -226,7 +299,8 @@ do{
 			carga_turno();
 	break;
 		case 2:
-			mostrar_turno_fecha();
+			ingresar_mes(&mes);
+			mostrar_turno_fecha(&lista_turnos,mes,tratamientos);
 	break;
 		case 3:
 			mostrar_turno_nombre();
@@ -235,7 +309,16 @@ do{
 			mostrar_turno_idCliente();
 	break;
 		case 5:
-			ganancia_mensual();
+			reset_turno(&lista_turnos);
+			ingresar_mes(&mes);
+			float_aux_1 = ganancia_mensual(&lista_turnos,tratamientos,mes,0);
+			if(float_aux_1){
+				printf(">>La ganancia total de ");
+				if(mes == 11) printf("noviembre");
+				else printf("diciembre");
+				printf(" fue de $%.2f.\n", float_aux_1);
+			}
+			else printf(">>No hubieron ganancias en el mes dado.\n");
 	break;
 		case 6:
 			mostrar_lista_turnos();
