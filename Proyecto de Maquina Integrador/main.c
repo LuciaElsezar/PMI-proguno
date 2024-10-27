@@ -109,9 +109,21 @@ void modifica_tratamiento(){
 }
 
 //i)---Modifica la forma de pago de un turno segun idCliente(solo turnos no realizados)
-void modifica_formapago(){
-	printf("Modifica la forma de pago de un turno\n");
-}
+int modifica_formapago(Lista_Turno* l, int id, int p){
+	reset_turno(l); int e = 0;
+	while(!isOos_turno(*l)){
+		if(Get_id_cliente(l->cur->vipd)==id){
+			e = 1; //Se encontro un turno correspondiente al cliente
+			if(!(Get_realizado(l->cur->vipd))){
+				Set_forma_pago(&(l->cur->vipd), p);
+				return 1; //1 -> exito
+			};
+		};
+		forward_turno(l);
+	};
+	if(e) return 0;
+	else return -1; //-1 -> turno no encontrado
+};
 
 //j)---Cancelar turno por Id cliente. Detalles en el practico
 void cancelar_turno(){
@@ -219,8 +231,9 @@ int main(){
 
     //--Variables simples
     char arr_aux[500], tecla;
-    int opc = 1, i, mes, int_aux_1, int_aux_2;
-    float float_aux_1;
+    int opc = 1, i, mes, forma_pago, res;
+    float monto;
+    long int dni;
 
     //--Abre archivos
     FILE *fp_clientes, *fp_turnos, *fp_menu, *fp_tratamientos;
@@ -312,12 +325,12 @@ do{
 		case 5:
 			reset_turno(&lista_turnos);
 			ingresar_mes(&mes);
-			float_aux_1 = ganancia_mensual(&lista_turnos,tratamientos,mes,0);
-			if(float_aux_1){
+			monto = ganancia_mensual(&lista_turnos,tratamientos,mes,0);
+			if(monto){
 				printf(">>La ganancia total de ");
 				if(mes == 11) printf("noviembre");
 				else printf("diciembre");
-				printf(" fue de $%.2f.\n", float_aux_1);
+				printf(" fue de $%.2f.\n", monto);
 			}
 			else printf(">>No hubieron ganancias en el mes dado.\n");
 	break;
@@ -325,7 +338,16 @@ do{
 			mostrar_lista_turnos();
 	break;
 		case 7:
-			modifica_formapago();
+			printf(">>Ingrese el Id de cliente a buscar:\n");
+			scanf("%ld", &dni);
+			printf("Ingrese el nuevo tipo de pago:\n");
+			scanf("%d", &forma_pago);
+			res=modifica_formapago(&lista_turnos,dni,forma_pago);
+			switch(res){
+			case 1: printf(">>Se modifico exitosamente el pago.\n"); break;
+			case 0: printf(">>El ultimo turno del cliente ya fue realizado. No se cambio la forma de pago.\n"); break;
+			case -1: printf(">>No se encontraron turnos correspondientes al cliente.\n"); break;
+			};
 	break;
 		case 8:
 			cancelar_turno();

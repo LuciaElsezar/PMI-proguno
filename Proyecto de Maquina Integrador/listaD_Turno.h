@@ -39,9 +39,9 @@ int insert_turno(Lista_Turno* l, Turno T){
     Nodo* nuevo = (Nodo*)malloc(sizeof(Nodo)); //Reserva memoria
     if(nuevo == NULL) return 0; //Si no hay espacio termina
     nuevo->vipd = T;
-	nuevo->next = l->cur; //El siguiente del nuevo va a ser igual al primero
-	l->cur = nuevo; //El cursor apunta al nuevo
+	nuevo->next = l->cur; //El siguiente del nuevo va a ser igual al sig del cur
     if(l->cur == l->aux){ //Si cur y aux apuntan al primero o null
+		l->cur = nuevo; //El cursor apunta al nuevo
         l->aux=nuevo; //El aux
         l->acc=nuevo; //El acceso ahora apuntan al nuevo elemento
     }
