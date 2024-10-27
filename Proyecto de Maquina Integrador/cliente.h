@@ -37,7 +37,7 @@ void Set_nivel(Cliente* c, int n){
 };
 
 //--- Get ---------------------------
-int Get_dni(Cliente c){
+long int Get_dni(Cliente c){
     return c.dni;
 };
 
