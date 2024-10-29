@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <malloc.h>
 #include "listaD_turno.h"
 #include "listaE_Cliente.h"
 #include <conio.h>
@@ -300,6 +301,24 @@ int ingresar_int(int* x, int min, int max, char msg[],char err[]){
 		};
 	}while(*x < min || *x > max);
 	return *x;
+};
+
+//---Funcion para generar un codigo hexadecimal que no se utilizo
+char* generar_hex(char hex[]){ //Devuelve un puntero. Luego hay que liberar la memoria utilizada
+char* p = (char*)malloc(sizeof(char)*TAM_ID_TURNO);
+if(p==NULL) return p; //Puntero a null
+int j = strlen(hex)-1, sig = 1;
+	while(sig){
+		switch(hex[j]){
+		case '0' ... '8':
+		case 'a' ... 'e':
+			hex[j]++; sig = 0; break; //del 0 al 8 y de la a a la e slo hay que pasar al sig char
+		case '9': hex[j] = 'a'; sig = 0; break; //Si vale nueve, pasa a ser una a
+		case 'f': hex[j] = '0'; j--; break; //Si es una f, pasa a ser un 0, y revisa el valor del siguiente
+		};
+	};
+strcpy(p,hex);
+return p;
 };
 
 
