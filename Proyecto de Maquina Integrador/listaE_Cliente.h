@@ -63,7 +63,7 @@ void supress_cliente(Lista_Cliente* L){
 };
 
 //---copy---------------------------
-Cliente copy_Lista(Lista_Cliente *L){
-    return L->VIPD[L->cur];
+Cliente copy_cliente(Lista_Cliente l){
+    return l.VIPD[l.cur];
 };
 #endif // LISTACLIENTE_H_INCLUDED

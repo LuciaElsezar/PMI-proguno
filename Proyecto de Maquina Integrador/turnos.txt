@@ -1,4 +1,4 @@
-jd812923
+27395493
 JuanHernandez
 23789473
 1 0 0 0 0 0 0 0 0 1
@@ -244,10 +244,7 @@ Jincent
 0 0 0 0 1 1 0 0 0 0
 2
 17865
-<<<<<<< Updated upstream
 04-11-24 5hs
-=======
-04-11-24 12hs
 0
 UHE65
 Vincent
@@ -256,7 +253,6 @@ Vincent
 2
 17865
 04-11-24 11hs
->>>>>>> Stashed changes
 1
 
 WSZ20
