@@ -367,13 +367,8 @@ int main(){
 //--Inicializa Variables------------------------------
 
     //--Variables simples
-<<<<<<< Updated upstream
-    char arr_aux[500], tecla;
-    int opc = 1, i, mes, forma_pago, res;
-=======
     char arr_aux[500], tecla, nom_min[TAM_NOMBRE];
     int opc = 1, i, mes, forma_pago, res, tratamiento;
->>>>>>> Stashed changes
     float monto;
     long int dni;
 
@@ -505,15 +500,11 @@ do{
 			registar_cliente();
 	break;
 		case 11:
-<<<<<<< Updated upstream
-			mostrar_turno_tratamiento();
-=======
 			printf("Ingrese el tratamiento:\n1. %s\n2. %s\n3. %s\n4. %s\n5. %s\n6. %s\n7. %s\n8. %s\n9. %s\n10. %s\n", tratamientos[0].nombre, tratamientos[1].nombre, tratamientos[2].nombre, tratamientos[3].nombre, tratamientos[4].nombre, tratamientos[5].nombre, tratamientos[6].nombre, tratamientos[7].nombre, tratamientos[8].nombre, tratamientos[9].nombre);
 			system("pause");
 			ingresar_int(&tratamiento,1,10,"Tratamiento a buscar","Error. El tratamiento no existe. Reintente.");
 			mostrar_turno_tratamiento(&lista_turnos, tratamiento-1, tratamientos);
 			system("pause");
->>>>>>> Stashed changes
 	break;
 		case 12:
 			mostrar_lista_clientes();
@@ -522,9 +513,6 @@ do{
 			eliminar_cliente();
 	break;
 		case 14:
-<<<<<<< Updated upstream
-			modifica_turno_cliente();
-=======
 			printf(">>Ingrese el Id de cliente a buscar:\n");
 			scanf("%ld", &dni);
 			res = modifica_turno_cliente(&lista_clientes, &lista_turnos, dni);
@@ -534,7 +522,6 @@ do{
 			case -1: printf("No existe un cliente con ese Id.\n"); break;
 			};
 			system("pause");
->>>>>>> Stashed changes
 	break;
 		case 15:
 			mostrar_turno_norealizado();

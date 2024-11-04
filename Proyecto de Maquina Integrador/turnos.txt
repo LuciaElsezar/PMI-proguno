@@ -244,9 +244,7 @@ Jincent
 0 0 0 0 1 1 0 0 0 0
 2
 17865
-<<<<<<< Updated upstream
 04-11-24 5hs
-=======
 04-11-24 12hs
 0
 UHE65
@@ -256,7 +254,6 @@ Vincent
 2
 17865
 04-11-24 11hs
->>>>>>> Stashed changes
 1
 WSZ20
 Clayton
