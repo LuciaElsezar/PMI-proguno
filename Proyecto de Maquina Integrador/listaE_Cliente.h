@@ -66,4 +66,8 @@ void supress_cliente(Lista_Cliente* L){
 Cliente copy_cliente(Lista_Cliente l){
     return l.VIPD[l.cur];
 };
+//---isOos--------------------------
+int isOos_cliente(Lista_Cliente l){
+return l.cur>l.ultimo;
+}
 #endif // LISTACLIENTE_H_INCLUDED

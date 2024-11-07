@@ -61,9 +61,101 @@ if(realizado){
 
 
 //a)---Carga un turno por teclado
-void carga_turno(){
-	printf("Se cargo un turno\n");
-};
+void carga_turno(Lista_Turno* l_t, Lista_Cliente* l_c, FILE *tratamientos){//verificar si es nuevo cliente o no
+	Turno nuevo_turno, aux_turno;
+	Cliente nuevo_cliente, aux_cliente;
+	long int id;
+	char nom[26],id_tur[26];
+	int t,c, d, dia, mes, anio, hora;
+
+	printf("Ingrese la id a buscar\n");scanf("%ld", &id);
+	reset_cliente(l_c);
+	while(!isOos_cliente(*l_c)){
+		aux_cliente=copy_cliente(*l_c);
+		if(Get_dni(aux_cliente)== id){  //verificar si el id ingresado esta registrado o no
+		printf("EL id pertenece a un cliente registrado");
+	    printf("----------------------------------------");
+	    printf("Ingrese los datos del turno\n");
+	    printf("Generando id_turno.......\n");//utilizar la funcion para generar un turno
+	    //funcion
+	    printf("Nombre del turno\n");
+	    scanf("%[^\n]s",nom);
+		printf("tratamientos\n Ingresa la cantidad de tratamientos a realizar(no mayor a 3):");
+		scanf("%d", &t);
+		printf("Elija una opcion\n");
+			do{
+				for(c=0; c<t; c++){
+					printf("<1>unas \n <2> Limpieza facial \n <3>Masajes \n <4>Manicura\n <5>Pedicura\n <6>Depilacion \n <7>Pestañas \n <8>Peeling \n <9>Ondas Galvanicas\n <10>Botox\n"); scanf("%d", &d);
+					d--;//posicion en el arreglo
+					Set_tratamiento(&aux_turno, 1, d);
+				}
+			}while(t!=3 && t<0);//verifica que la cantidad de tratamientos sea correcta
+
+			while(Get_dia(aux_turno)<01 && Get_dia(aux_turno)>31 && Get_mes(aux_turno)>13 &&
+			  	Get_mes(aux_turno)<10 && Get_anio(aux_turno)!= 2024
+			  	&& Get_hora(aux_turno)<9 && Get_hora(aux_turno)>20){//verifica que las fechas no esten fuera de lugar
+				printf("Fecha(tiene que ser a partir del dia 01/11/2024 a las 9hs):");
+				printf("dia: \n");scanf("%d",&dia);
+				printf("mes: \n"); scanf("%d",&mes);
+				printf("anio: \n"); scanf("%d",&anio);
+				printf("Hora: \n"); scanf("%d",&hora);
+			}
+			printf("El total a pagar es");
+			Set_nombre_turno(&aux_turno, nom);
+			Set_dia(&aux_turno, dia);
+			Set_mes(&aux_turno, mes);
+			Set_anio(&aux_turno, anio);
+			Set_hora(&aux_turno, hora);
+			insert_turno(l_t,aux_turno);
+	}
+
+	else{fordward_cliente(l_c);}
+
+	printf("Registrar clienten\n");
+	registar_cliente();//colocar parametros de la funcion
+	FILE *fp1=fopen("clientes.txt","a+");
+	fprintf(fp1,"%d\n",dni);
+	fprintf(fp1,"%s\n",nombre);
+	fprintf(fp1,"%s\n",apellido);
+	fprintf(fp1,"%d\n",cantidad_tratamientos);
+	fprintf(fp1,"%d\n",nivel);
+	//colocar en la funcion de mari---
+	fclose(fp1);
+	 printf("Ingrese los datos del turno\n");
+	    printf("Generando id_turno.......\n");//utilizar la funcion para generar un turno
+	    //funcion
+	    printf("Nombre del turno\n");
+	    scanf("%[^\n]s",nom);
+		printf("tratamientos\n Ingresa la cantidad de tratamientos a realizar(no mayor a 3):");
+		scanf("%d", &t);
+		printf("Elija una opcion\n");
+			do{
+				for(c=0; c<t; c++){
+					printf("<1>unas \n <2> Limpieza facial \n <3>Masajes \n <4>Manicura\n <5>Pedicura\n <6>Depilacion \n <7>Pestañas \n <8>Peeling \n <9>Ondas Galvanicas\n <10>Botox\n"); scanf("%d", &d);
+					d--;//posicion en el arreglo
+					Set_tratamiento(&aux_turno, 1, d);
+				}
+			}while(t!=3 && t<0);//verifica que la cantidad de tratamientos sea correcta
+
+			while(Get_dia(aux_turno)<01 && Get_dia(aux_turno)>31 && Get_mes(aux_turno)>13 &&
+			  	Get_mes(aux_turno)<10 && Get_anio(aux_turno)!= 2024
+			  	&& Get_hora(aux_turno)<9 && Get_hora(aux_turno)>20){//verifica que las fechas no esten fuera de lugar
+				printf("Fecha(tiene que ser a partir del dia 01/11/2024 a las 9hs):");
+				printf("dia: \n");scanf("%d",&dia);
+				printf("mes: \n"); scanf("%d",&mes);
+				printf("anio: \n"); scanf("%d",&anio);
+				printf("Hora: \n"); scanf("%d",&hora);
+			}
+			printf("El total a pagar es");
+			Set_nombre_turno(&aux_turno, nom);
+			Set_dia(&aux_turno, dia);
+			Set_mes(&aux_turno, mes);
+			Set_anio(&aux_turno, anio);
+			Set_hora(&aux_cliente, hora);
+			insert_turno(l_t, aux_turno);
+
+	}
+}
 
 //b)---Funcion auxiliar que busca los turnos no realizados
 void buscar_turno(){
