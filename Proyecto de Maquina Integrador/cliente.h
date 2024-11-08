@@ -41,7 +41,7 @@ long int Get_dni(Cliente c){
     return c.dni;
 };
 
-char* Get_nombre_cliente(Turno t){
+char* Get_nombre_cliente(Cliente t){
 char* p;
 p = (char*)malloc(sizeof(char)*TAM_NOMBRE);
 if(p==NULL){
@@ -52,7 +52,7 @@ else{
 };
 };
 
-char* Get_apellido_cliente(Turno t){
+char* Get_apellido_cliente(Cliente t){
 char* p;
 p = (char*)malloc(sizeof(char)*TAM_NOMBRE);
 if(p==NULL){

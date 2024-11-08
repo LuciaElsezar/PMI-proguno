@@ -11,12 +11,12 @@ typedef struct {
 
 //---Funciones de la lista---------------
 //---fordward----------------------------
-void fordward_cliente(Lista_Cliente* L){
+void forward_cliente(Lista_Cliente* L){
 	L->cur = (L->cur+1);
 }
 //---reset
 void reset_cliente(Lista_Cliente* L){
-    L->cur=-1;
+    L->cur=0;
 }
 //---Inicializador-----------------------
 void init_lista_cliente(Lista_Cliente *L){
