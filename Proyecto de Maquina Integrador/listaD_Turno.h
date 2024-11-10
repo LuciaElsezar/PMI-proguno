@@ -46,7 +46,8 @@ int insert_turno(Lista_Turno* l, Turno T){
         l->acc=nuevo; //El acceso ahora apuntan al nuevo elemento
     }
     else{ //El cursor apunta al siguiente del auxiliar
-        l->aux->next = nuevo; //El siguiente apunta al nuevo
+        l->aux->next = nuevo; //El siguiente del aux apunta al nuevo
+        l->cur = nuevo; //El cur apunta al nuevo
     };
 return 1;
 };

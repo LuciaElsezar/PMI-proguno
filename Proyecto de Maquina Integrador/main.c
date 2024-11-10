@@ -45,7 +45,7 @@ int j = strlen(hex)-1, sig = 1;
 int ingresar_int(int* x, int min, int max, char msg[], char err[]){
 	*x = 0;
 	do{
-		printf(">>%s\n", msg);
+		printf(">>%s\n>>", msg);
 		scanf(" %d", x);
 		if(*x < min || *x > max){
 			printf("%s\n", err);
@@ -57,7 +57,7 @@ int ingresar_int(int* x, int min, int max, char msg[], char err[]){
 };
 
 //---Funcion para mostrar un turno
-void muestra_turno(Turno t, int id_t, int nombre, int id_c, int fecha, int hora, int forma_pago, int tratamiento, int realizado, Tratamiento ts[]){
+void muestra_turno(Turno t, int id_t, int nombre, int id_c, int fecha, int hora, int forma_pago, int tratamiento, int total, int realizado, Tratamiento ts[]){
 char* p; int i;
 if(id_t){
 	if((p = Get_id_turno(t))) printf(">>Turno: %s\n", p);
@@ -76,7 +76,20 @@ if(tratamiento){
 	for(i=0;i<10;i++){
 		if(Get_tratamiento(t,i)) printf("   >>%s\n", ts[i].nombre);
 	};
-}
+};
+if(forma_pago){
+	printf(">>Forma de pago: ");
+	switch(Get_forma_pago(t)){
+	case DEBITO: printf("Debito"); break;
+	case CREDITO: printf("Credito"); break;
+	case QR: printf("Codigo QR"); break;
+	case EFECTIVO: printf("Efectivo"); break;
+	};
+	printf("\n");
+};
+if(total){
+	printf("Total a pagar: $%.2f\n", Get_total(t));
+};
 if(realizado){
 	printf(">>Se realizo el turno: ");
 	if(Get_realizado(t))printf("Si.\n");
@@ -84,6 +97,8 @@ if(realizado){
 };
 };
 };
+
+//---Consignas
 
 //l)---funcion que permite registrar un cliente
 int registar_cliente(Lista_Cliente *l){
@@ -216,12 +231,11 @@ int buscar_turno(Lista_Turno *l,long int idcliente){
 	while(!isOos_turno(*l)){
        Turno busca_turno = copy_turno(*l);
         if(Get_id_cliente(busca_turno) == idcliente){
-                printf("Entro\n");
                 e++;
             if(Get_realizado(busca_turno) == 0){
               return 1; //se encontro un turno no realizado
-            }
-        }
+            };
+        };
         forward_turno(l);
     };//end while
     if (e == 0){
@@ -252,13 +266,13 @@ void mostrar_turno_fecha(Lista_Turno *l, int m, Tratamiento ts[]){
 					if(Get_dia(t)==d){
 						if(Get_hora(t)==h){ //Turno coincide en fecha y hora
 							if(!dia_mostrado){
-								printf(">>- - - - - -| %d / %d / %d |- - - - - -<<\n", Get_dia(t), Get_mes(t), Get_anio(t));
+								printf("\n>>- - - - - -| %d / %d / %d |- - - - - -<<\n\n", Get_dia(t), Get_mes(t), Get_anio(t));
 								dia_mostrado = 1;
 							}
-							printf(">>- - - - - - - - - - -\n");
+							else printf("\n>>- - - - - - - - - -- - - - - - - - - -<<\n");
 							if(Get_realizado(t)) n++;
 							else o++;
-							muestra_turno(t,1,1,1,0,1,1,1,1,ts);
+							muestra_turno(t,1,1,1,0,1,1,1,1,1,ts);
 						};
 					};
 				};
@@ -266,10 +280,13 @@ void mostrar_turno_fecha(Lista_Turno *l, int m, Tratamiento ts[]){
 			};
 		};
 	};
-	if(!n)printf("No se realizaron turnos en el mes dado.\n");
-	else printf("Se realizaron un total de %d turnos en el mes.\n",n);
-	if(!o)printf("No quedan turnos sin realizar.\n");
-	else printf("Quedan %d turnos por realizar.\n", o);
+	printf("\n>>- - - - - - - - - -- - - - - - - - - -<<\n");
+	if(!n)printf(">>No se realizaron turnos en el mes dado.\n");
+	else printf(">>Se realizaron un total de %d turnos en el mes.\n",n);
+	printf(">>- - - - -\n");
+	if(!o)printf(">>No quedan turnos sin realizar.\n");
+	else printf(">>Quedan %d turnos por realizar.\n", o);
+	printf(">>- - - - - - - - - -- - - - - - - - - -<<\n");
 };
 
 //d)---Funcion que muestra los turno por nombre de cliente de a 3
@@ -292,7 +309,8 @@ void mostrar_turno_nombre(char nom_base[], Lista_Turno* l, Tratamiento ts[]){
 		if(semejantes) cant_elems ++;
 		forward_turno(l);
 	};
-	cant_pags = (int)ceil(cant_elems/3);
+	if(cant_elems % 3 == 0) cant_pags = (int)(cant_elems/3)-1; //Crea una pagina extra por tener algun decimal medio lol sino
+	else cant_pags = (int)ceil(cant_elems/3);
 	//Se ejecuta hasta que se sale
 	while(tecla != 27){
 		i = 0;
@@ -326,6 +344,7 @@ void mostrar_turno_nombre(char nom_base[], Lista_Turno* l, Tratamiento ts[]){
 			cabecera[strlen(cabecera)-13] = '=';
 			cabecera[strlen(cabecera)-14] = '=';
 		};
+		printf(">>===| Nombres que empiezan por \"%s\"\n", nom_base);
 		printf("%s\n",cabecera);
 		strcpy(min_aux, nom_base); //El minimo ahora es el nombre base
 		reset_turno(l); //Cur apunta al primero
@@ -361,25 +380,26 @@ void mostrar_turno_nombre(char nom_base[], Lista_Turno* l, Tratamiento ts[]){
 				strcpy(min_aux, nom_aux);
 				reset_turno(l);
 
-			};
-			if(i > 3*pag  && e){ //va a mostrar si es de los ult 3 y encontro uno que corresponda
-				printf(">>- - - - - - - - - - -\n");
-				muestra_turno(t,1,1,1,1,1,1,1,1,ts);
-			};
-			if(e) forward_turno(l);
+				};
+				if(i > 3*pag  && e){ //va a mostrar si es de los ult 3 y encontro uno que corresponda
+					printf("\n");
+					muestra_turno(t,1,1,1,1,1,1,1,1,1,ts);
+					printf("\n>>- - - - - - - - - -- - - - - - - - - -<<\n");
+				};
+				if(e) forward_turno(l);
 		}while(i < 3*(pag+1) && strcmp(nom_aux,"zzzzzzzzzzzzzzz"));
-	printf(">>=====> Use las flechas. Escape para salir. <=====<<\n");
-	tecla = getch();
-	switch(tecla){
-	case 75:
-		if(pag > 0) pag--;
-	break;
-	case 77:
-		if(pag < cant_pags) pag++;
-	break;
-	default: break;
-	};
-	system("cls");
+		printf("\n>>=====> Use las flechas. Escape para salir. <=====<<");
+		tecla = getch();
+		switch(tecla){
+		case 75:
+			if(pag > 0) pag--;
+		break;
+		case 77:
+			if(pag < cant_pags) pag++;
+		break;
+		default: break;
+		};
+		system("cls");
 	};
 }
 
@@ -404,18 +424,18 @@ int mostrar_turno_idCliente(Lista_Turno *l, Turno* nuevo, long int id, int mes, 
 };
 
 //f)---Calcula la ganancia mensual considerando los turnos ya realizados(recursiva)
-float ganancia_mensual(Lista_Turno* l, int m){
-	Turno t; float g;
+float ganancia_mensual(Lista_Turno* l, Turno* t, int m){
+	float x = 0.0;
 	if((isOos_turno(*l))){
-		return 0;
+		return x;
 	}
 	else{
-		t = copy_turno(*l);
-		if(Get_realizado(t) && Get_mes(t) == m){
-			g = Get_total(t);
+		*t = copy_turno(*l);
+		if(Get_realizado(*t) && Get_mes(*t) == m){
+			x = Get_total(*t);
 		};
-		forward_turno(l);
-		return g + ganancia_mensual(l,m);
+	forward_turno(l);
+	return x + ganancia_mensual(l,t,m);
 	};
 };
 
@@ -424,30 +444,35 @@ void mostrar_lista_turnos(Lista_Turno *l, Tratamiento tratamientos[]){
 	reset_turno(l); Turno t_aux;
 	while(!isOos_turno(*l)){
 	t_aux = copy_turno(*l);
-	muestra_turno(t_aux,1,1,1,1,1,1,1,1,tratamientos);
+	muestra_turno(t_aux,1,1,1,1,1,1,1,1,1,tratamientos);
 	forward_turno(l);
 	};
 };
 
 //h)---Funcion que modifica la cantidad de tratamientos de un cliente registrado
 int modifica_tratamiento(Lista_Cliente *l,int cant,long int id_modifico){
-	printf("Modifica la cantidad de tratamientos\n");
-	reset_cliente(l);
+	int cant_total;
+	reset_cliente(l); Cliente modificar;
 	while(!isOos_cliente(*l)){
-        Cliente modificar;
-        modificar= copy_cliente(*l);
+        modificar = copy_cliente(*l);
         if(Get_dni(modificar) == id_modifico){
-            int cant_total = Get_cant_tratamientos(modificar)+cant;
+            cant_total = Get_cant_tratamientos(modificar)+cant;
             Set_cant_tratamientos(&modificar, cant_total);
-            supress_cliente(l);
+            if(cant_total > 11) cant_total = 11;
+			switch(cant_total){ //modifica nivel
+			case 1 ... 4: Set_nivel(&modificar,1); break;
+			case 5 ... 10: Set_nivel(&modificar,2); break;
+			case 11: Set_nivel(&modificar,3); break;
+			supress_cliente(l);
             insert_cliente(l,modificar);
+	};
             return 1;//exito
         }else{
         forward_cliente(l);
-        }
+        };
 	}
 	return -1;//turno no se encontro
-}
+};
 
 
 //i)---Modifica la forma de pago de un turno segun idCliente(solo turnos no realizados)
@@ -455,21 +480,15 @@ int modifica_formapago(Lista_Turno* l, int id, int p){
 	reset_turno(l);
 	int e = 0;
 	Turno t;
-	while(!isOos_turno(*l)){
+	e = buscar_turno(l,id);
+	if(e>0){
 		t = copy_turno(*l);
-		if(Get_id_cliente(t)==id){
-			e = 1; //Se encontro un turno correspondiente al cliente
-			if(!(Get_realizado(t))){
-				Set_forma_pago(&(t), p);
-				supress_turno(l);
-				insert_turno(l,t);
-				return 1; //1 -> exito
-			};
-		};
-		forward_turno(l);
-	};
-	if(e) return 0;
-	else return -1; //-1 -> turno no encontrado
+		Set_forma_pago(&t, p);
+		supress_turno(l);
+		insert_turno(l,t);
+		return 1; //1 -> exito
+	}
+	else return e; //0 -> no se encontro; -1 -> no existe
 };
 
 //j)---Cancelar turno por Id cliente. Detalles en el practico
@@ -504,7 +523,6 @@ int cancelar_turno(Lista_Turno *l, FILE *fp1,long int id_buscada){
 
 //k)---Almacenar datos de los turnos pagados con alguna forma de pago
 int almacenar_turnos_formapago(Lista_Turno *l,int forma_pago, FILE *fp1){
-	printf("Se almacenaron los turnos con cierta forma de pago");
 	int cont;
 	reset_turno(l);
 	while(!isOos_turno(*l)){
@@ -532,64 +550,99 @@ int almacenar_turnos_formapago(Lista_Turno *l,int forma_pago, FILE *fp1){
 void mostrar_turno_tratamiento(Lista_Turno* l, int id, Tratamiento ts[]){
 	int n = 0, o = 0; Turno t;
 	reset_turno(l);
+	printf(">>===========| Mostrar Turnos que incluyan %s |===========<<\n\n", ts[id].nombre);
 	while(!isOos_turno(*l)){
 		t = copy_turno(*l);
 		if(Get_tratamiento(t,id)){
-					printf(">>- - - - - - - - - - -\n");
-					muestra_turno(t,1,1,1,1,1,1,1,1,ts);
-					if(Get_realizado(t))n++;
-					else o++;
+			muestra_turno(t,1,1,1,1,1,1,1,1,1,ts);
+			printf("\n>>- = - = - = - = -- = - = - = - = -<<\n\n");
+			if(Get_realizado(t))n++;
+			else o++;
 		};
 	forward_turno(l);
 	};
-	if(!n)printf("No se realizo ese tratamiento en ningun turno.\n");
-	else printf("Se realizao un total de %d veces.\n",n);
-	if(!o)printf("No quedan turnos sin realizar que incluyan ese tratamiento.\n");
-	else printf("Quedan %d turnos por realizar con ese tratamiento.\n", o);
+	if(!n)printf(">>No se realizo el tratamiento de %s en ningun turno.\n", ts[id].nombre);
+	if(n == 1) printf(">>El tratamiento de %s se realizo una vez.\n",ts[id].nombre);
+	if(n>1) printf(">>El tratamiento de %s se realizo un total de %d veces.\n",ts[id].nombre,n);
+	printf("\n>>- - -\n\n");
+	if(!o)printf(">>No quedan turnos sin realizar que incluyan %s.\n", ts[id].nombre);
+	if(o == 1) printf(">>Queda un turno por realizar que inluye el tratamiento de %s", ts[id].nombre);
+	if(o>1) printf(">>Quedan %d turnos por realizar que incluyen %s.\n", o, ts[id].nombre);
+	printf("\n>>- = - = - = - = -- = - = - = - = -<<\n\n");
 }
 
-//n)---Realizar una precarga autom�tica al iniciar el programa de los clientes a la lista de Clientes. Debe contener al menos 10 clientes.
-void precarga_clientes(Lista_Cliente* l, FILE* f){
+//n)---Realizar una precarga automatica al iniciar el programa de los clientes a la lista de Clientes. Debe contener al menos 10 clientes.
+int precarga_clientes(Lista_Cliente* l, FILE* f){
 	Cliente cliente_aux;
+	long int dni;
+	char nom[TAM_NOMBRE], ap[TAM_NOMBRE];
+	int cant_tratamientos, nivel;
 	int n = 0;
 	while(!feof(f)&&!isFull_cliente(*l)){
-		fscanf(f, " %ld", &cliente_aux.dni);
-		fscanf(f, " %[^\n]s", cliente_aux.nombre);
-		fscanf(f, " %[^\n]s", cliente_aux.apellido);
-		fscanf(f, " %d", &cliente_aux.cant_tratamientos);
-		fscanf(f, " %d\n", &cliente_aux.nivel);
+		fscanf(f, " %ld", &dni);
+		fscanf(f, " %[^\n]s", nom);
+		fscanf(f, " %[^\n]s", ap);
+		fscanf(f, " %d", &cant_tratamientos);
+		fscanf(f, " %d\n", &nivel);
+
+		Set_dni(&cliente_aux,dni);
+		Set_nombre_cliente(&cliente_aux,nom);
+		Set_apellido_cliente(&cliente_aux,ap);
+		Set_cant_tratamientos(&cliente_aux,cant_tratamientos);
+		Set_nivel(&cliente_aux,nivel);
+
 		insert_cliente(l,cliente_aux);
 		++n;
 	};
-	if(!feof(f)) printf("Se alcanzo el limite de clientes antes de finalizar la precarga.\n");
+	if(!feof(f)) return -1; //No se cargaron todos x falta de espacio en lista clientes
 	else
-		if(n == 0)printf("No hay clientes para precargar.\n");
-		else printf("Se precargaron %d clientes exitosamente.\n", n);
-	system("pause");
+		return n; //si n = 0, entonces no se precargo ninguno. si devuelve >= 1, se precargo esa cantidad
 };
 
 
 //---Precarga de los turnos
-void precarga_turnos(Lista_Turno* l, FILE* f){
+int precarga_turnos(Lista_Turno* l, FILE* f){
 	Turno turno_aux;
-	int n = 0, i;
-	while(!feof(f)){
-		fscanf(f, " %s", turno_aux.id_turno);
-		fscanf(f, " %s", turno_aux.nombre_cliente_turno);
-		fscanf(f, " %ld", &turno_aux.id_cliente);
+	int tratamientos[10], forma_pago, dia, mes, anio, hora, realizado;
+	float total;
+	long int id_cliente;
+	char id_turno[TAM_ID_TURNO], nom[TAM_NOMBRE];
+	int n = 0, i, exito;
+	while(!feof(f) && exito){
+	//Scanea en variables basicas
+		fscanf(f, " %s", id_turno);
+		fscanf(f, " %s", nom);
+		fscanf(f, " %ld", &id_cliente);
 		for(i = 0; i < 10; i++){
-			fscanf(f, " %d", &turno_aux.tratamientos[i]);
+			fscanf(f, " %d", &tratamientos[i]);
 		};
-		fscanf(f, " %d", &turno_aux.forma_pago);
-		fscanf(f, " %f", &turno_aux.total);
-		fscanf(f, "%d-%d-%d %dhs", &turno_aux.fecha_turno.dia,&turno_aux.fecha_turno.mes, &turno_aux.fecha_turno.anio, &turno_aux.fecha_turno.hora);
-		fscanf(f, " %d\n", &turno_aux.realizado);
-		insert_turno(l,turno_aux);
-		++n;
+		fscanf(f, " %d", &forma_pago);
+		fscanf(f, " %f", &total);
+		fscanf(f, "%d-%d-%d %dhs", &dia,&mes, &anio, &hora);
+		fscanf(f, " %d\n", &realizado);
+	//Setea en turno auxiliar
+		Set_id_turno(&turno_aux,id_turno);
+		Set_nombre_turno(&turno_aux,nom);
+		Set_id_cliente(&turno_aux,id_cliente);
+		for(i = 0; i < 10; i++){
+			Set_tratamiento(&turno_aux,tratamientos[i],i);
+		};
+		Set_forma_pago(&turno_aux,forma_pago);
+		Set_total(&turno_aux,total);
+		Set_hora(&turno_aux,hora);
+		Set_dia(&turno_aux,dia);
+		Set_mes(&turno_aux,mes);
+		Set_anio(&turno_aux,anio);
+		Set_realizado(&turno_aux,realizado);
+	//Inserta el turno auxiliar en la lista
+		exito = insert_turno(l,turno_aux);
+		if(exito){
+			forward_turno(l);
+			n++;
+		};
 	};
-	if(n == 0)printf("No hay clientes para precargar.\n");
-	else printf("Se precargaron %d turnos exitosamente.\n", n);
-	system("pause");
+	if(!feof(f)) return -1; //-1 -> No se terminaron de precargar pero hubo un error
+	return n; //Devuelve la cantidad de turnos k se precargaron
 };
 
 //ñ)---Muestra los clientes almacenados en lista clientes
@@ -641,36 +694,22 @@ int eliminar_cliente(Lista_Cliente *l, long int id_cliente){
 
 //p)---Funcion que modifica un turno confirmado (si asiste se modifica realizado, can tratamientos y el nivel)
 int modifica_turno_cliente(Lista_Cliente* l_c, Lista_Turno* l_t, long int id){
-	int c_encontrado = 0, t_encontrado = 0, i, cant_aux = 0; Turno t; Cliente c;
-	reset_cliente(l_c); reset_turno(l_t);
-	while(l_c->cur!=l_c->ultimo && !c_encontrado){
-		c = copy_cliente(*l_c);
-		if(Get_dni(c) == id) c_encontrado = 1; //El cliente existe
-		else forward_cliente(l_c);
-	};
-	if(!c_encontrado) return -1; //-1 -> El cliente no existe
-	while(!isOos_turno(*l_t)&&!t_encontrado){
-		t = copy_turno(*l_t);
-		if(!Get_realizado(t) && id == Get_id_cliente(t)) t_encontrado = 1; //El turno existe
-		else forward_turno(l_t);
-	};
-	if(!t_encontrado) return 0; //0 -> El turno no existe
-	Set_realizado(&t,1);
-	for(i = 0; i < 9; i++){
+	int e, i, cant_aux = 0; Turno t;
+	reset_turno(l_t);
+	e = buscar_turno(l_t,id);
+	if(e == 1){
+	for(i = 0; i < 10; i++){
 		cant_aux += Get_tratamiento(t, i);
 	};
-	cant_aux += Get_cant_tratamientos(c);
-	Set_cant_tratamientos(&c, cant_aux); //cambia cant trats
-	if(cant_aux > 11) cant_aux = 11;
-	switch(cant_aux){ //modifica nivel
-	case 1 ... 4: Set_nivel(&c,1); break;
-	case 5 ... 10: Set_nivel(&c,2); break;
-	case 11: Set_nivel(&c,3); break;
-	};
+	modifica_tratamiento(l_c,cant_aux,id);
+	t = copy_turno(*l_t);
+	Set_realizado(&t,1);
 	supress_turno(l_t);
 	insert_turno(l_t,t);
 	return 1; //Se modifico
-}
+	}
+	else return 0;
+};
 
 //q)---Muestra los turnos no realizados
 void mostrar_turno_norealizado(Lista_Turno *l, FILE *archivo){//usar reset antes de llamar a la funcion
@@ -737,15 +776,13 @@ int main(){
 //--Inicializa Variables------------------------------
 
     //--Variables simples
-//<<<<<<< Updated upstream
-    char arr_aux[500], tecla, nom_min[TAM_NOMBRE];
-    int opc = 1, i, mes, forma_pago, res, tratamiento, can, Mes, acum, cantidad_turnos;
-//>>>>>>> Stashed changes
+    char arr_aux[500], tecla, nom_min[TAM_NOMBRE], *p_txt;
+    int opc = 1, i, mes, forma_pago, res, tratamiento, can, Mes, acum, cant_turnos;
     float monto;
     long int dni;
-    Turno nuevo;
+    Turno nuevo, turno_aux;
     //--Abre archivos
-    FILE *fp_clientes, *fp_turnos, *fp_menu, *fp_tratamientos, *fp_turnos_cancelados , *fp_turnos_formapago;
+    FILE *fp_clientes, *fp_turnos, *fp_menu, *fp_tratamientos, *fp_turnos_cancelados;
 
 	fp_turnos_cancelados= fopen("turnos_cancelados.txt","r+");
     if(fp_turnos_cancelados == NULL){
@@ -789,10 +826,17 @@ int main(){
 	fscanf(fp_tratamientos, " %f", &tratamientos[i].precio);
 	};
 
-	precarga_clientes(&lista_clientes,fp_clientes);
-	precarga_turnos(&lista_turnos, fp_turnos);
+	res = precarga_clientes(&lista_clientes,fp_clientes);
+	if(res < 0) printf("No se finalizo la precarga de clientes. Sin espacio.\n");
+	if(!res) printf("No hay clientes para precargar.\n");
+	if(res > 0) printf("Se precargaron %d clientes.\n", res);
 
-	cantidad_turnos = contar_turnos(&lista_turnos);
+	cant_turnos = precarga_turnos(&lista_turnos, fp_turnos);
+	if(cant_turnos < 0) printf("No se finalizo la precarga de turnos. Sin espacio.\n");
+	if(!cant_turnos) printf("No hay turnos para precargar.\n");
+	if(cant_turnos > 0) printf("Se precargaron %d turnos.\n", cant_turnos);
+
+	system("pause");
 //--Menu----------------------------------------------
 do{
 	opc = 1;
@@ -817,9 +861,11 @@ do{
 			switch(tecla){
 			case 72:
 				if(opc > 1)opc--;
+				else opc = 16;
 				break; //sube
 			case 80:
 				if(opc < 16)opc++;
+				else opc = 1;
 				break; //baja
 			default: break;
     	};
@@ -830,7 +876,10 @@ do{
 			//carga_turno();
 	break;
 		case 2:
-			ingresar_int(&mes,11,12,"Ingrese el mes de los turnos:\n>>11: Noviembre\n>>12: Diciembre", "Error, mes no valido. Reintente.");
+			ingresar_int(&mes,11,12,">>===========| Mostrar turnos por fecha |===========<<\n\n>>Ingrese el mes de los turnos:\n  >>11: Noviembre\n  >>12: Diciembre", "Error, mes no valido. Reintente.");
+			system("cls");
+			if(mes == 11) printf(">>===========| Turnos de noviembre |===========<<\n");
+			else printf(">>===========| Turnos de diciembre |===========<<\n");;
 			mostrar_turno_fecha(&lista_turnos,mes,tratamientos);
 			system("pause");
 	break;
@@ -839,7 +888,6 @@ do{
 			printf("Escriba el nombre que busca:\n");
 			scanf("%s", nom_min);
 			mostrar_turno_nombre(nom_min,&lista_turnos,tratamientos);
-			system("pause");
 	break;
 		case 4:
             reset_turno(&lista_turnos);
@@ -854,8 +902,10 @@ do{
 	break;
 		case 5:
 			reset_turno(&lista_turnos);
-			ingresar_int(&mes,11,12,"Ingrese el mes de los turnos:\n>>11: Noviembre\n>>12: Diciembre", "Error, mes no valido. Reintente.");
-			monto = ganancia_mensual(&lista_turnos,mes);
+			ingresar_int(&mes,11,12,">>===========| Calcular las ganancias de un mes |===========<<\nIngrese el mes de los turnos:\n>>11: Noviembre\n>>12: Diciembre", "Error, mes no valido. Reintente.");
+			monto = ganancia_mensual(&lista_turnos,&turno_aux, mes);
+			system("cls");
+			printf(">>===========| Cambiar Forma de Pago de un Turno |===========<<\n");
 			if(monto){
 				printf(">>La ganancia total de ");
 				if(mes == 11) printf("noviembre");
@@ -873,14 +923,16 @@ do{
                 printf(">>No hay turnos para mostrar, cargue los turnos y vuelva a intentar\n");
 	break;
 		case 7:
+			printf(">>===========| Cambiar Forma de Pago de un Turno |===========<<\n");
 			printf(">>Ingrese el Id de cliente a buscar:\n");
 			scanf("%ld", &dni);
-			printf("Ingrese el nuevo tipo de pago:\n");
-			ingresar_int(&forma_pago,1,4,"Ingrese el nuevo tipo de pago:\n1: Debito\n2:credito\n3: Codigo QR\n4: Efectivo","Error. El metodo no existe.");
+			system("cls");
+			ingresar_int(&forma_pago,1,4,">>===========| Cambiar Forma de Pago de un Turno |===========<<\n>>Ingrese el nuevo tipo de pago:\n  >>1: Debito\n  >>2: Credito\n  >>3: Codigo QR\n  >>4: Efectivo","Error. El metodo no existe.");
 			res=modifica_formapago(&lista_turnos,dni,forma_pago);
+			printf(">>===========| Cambiar Forma de Pago de un Turno |===========<<\n");
 			switch(res){
 			case 1: printf(">>Se modifico exitosamente el pago.\n"); break;
-			case 0: printf(">>El ultimo turno del cliente ya fue realizado. No se cambio la forma de pago.\n"); break;
+			case 0: printf(">>El ultimo turno del cliente ya fue realizado. No se cambio la forma de pago de ningun turno.\n"); break;
 			case -1: printf(">>No se encontraron turnos correspondientes al cliente.\n"); break;
 			};
 			system("pause");
@@ -911,8 +963,13 @@ do{
                 system("pause");
 	break;
 		case 11:
-			printf("Ingrese el tratamiento:\n1. %s\n2. %s\n3. %s\n4. %s\n5. %s\n6. %s\n7. %s\n8. %s\n9. %s\n10. %s\n", tratamientos[0].nombre, tratamientos[1].nombre, tratamientos[2].nombre, tratamientos[3].nombre, tratamientos[4].nombre, tratamientos[5].nombre, tratamientos[6].nombre, tratamientos[7].nombre, tratamientos[8].nombre, tratamientos[9].nombre);
-			ingresar_int(&tratamiento,1,10,"Tratamiento a buscar","Error. El tratamiento no existe. Reintente.");
+			system("cls");
+			printf(">>===========| Mostrar Turnos que incluyan cierto tratamiento |===========<<\n>>Tratamientos:\n");
+			for(i = 0; i < 10; i++){
+				printf("  >>%d. %s\n", i+1, tratamientos[i].nombre);
+			};
+			system("pause"); system("cls");
+			ingresar_int(&tratamiento,1,10,">>===========| Mostrar Turnos que incluyan cierto tratamiento |===========<<\n>>Tratamiento a buscar:","Error. El tratamiento no existe. Reintente.");
 			mostrar_turno_tratamiento(&lista_turnos, tratamiento-1, tratamientos);
 			system("pause");
 	break;
@@ -939,23 +996,20 @@ do{
 			system("pause");
 	break;
 	case 14:
-			printf("Ingrese el dni:\n");
+			printf(">>===========| Modificar un turno a realizado |===========<<\n");
+			printf(">>Ingrese el dni:\n>>");
 			scanf("%ld", &dni);
 			res = modifica_turno_cliente(&lista_clientes, &lista_turnos, dni);
-			switch(res){
-			case 1: printf("Turno modificado exitosamente.\n"); break;
-			case 0: printf("No tiene ningun turno sin realizar.\n"); break;
-			case -1: printf("No existe un cliente con ese Id.\n"); break;
-			};
+			if(res) printf(">>Turno modificado exitosamente.\n");
+			else printf(">>No se encontro un turno pendiente.\n");
 			system("pause");
-	break;
-		case 15:
+			break;
+	case 15:
 		    if(!isEmpty_turno(lista_turnos)){
 			mostrar_turno_norealizado(&lista_turnos,fp_turnos_cancelados);
-		    }
+		    };
 	break;
 		case 16:
-
 	break;
 	default:
 		printf("Como elegiste esta opcion??"); //No se puede elegir jaja
@@ -972,16 +1026,22 @@ do{
     while(!isOos_cliente(lista_clientes)){
 	cliente_txt = copy_cliente(lista_clientes);
 	fprintf(fp_clientes,"%ld\n",Get_dni(cliente_txt));
-	fprintf(fp_clientes,"%s\n",Get_nombre_cliente(cliente_txt));
-	fprintf(fp_clientes,"%s\n",Get_apellido_cliente(cliente_txt));
+	p_txt = Get_nombre_cliente(cliente_txt);
+	fprintf(fp_clientes,"%s\n",p_txt);
+	free((void*)p_txt);
+	p_txt = Get_apellido_cliente(cliente_txt);
+	fprintf(fp_clientes,"%s\n",p_txt);
+	free((void*)p_txt);
 	fprintf(fp_clientes,"%d\n",Get_cant_tratamientos(cliente_txt));
 	fprintf(fp_clientes,"%d\n",Get_nivel(cliente_txt));
     forward_cliente(&lista_clientes);
-    }
+    };
+
     reset_turno(&lista_turnos);
     while(!isEmpty_turno(lista_turnos)){
         supress_turno(&lista_turnos);
     };
+
     fclose(fp_clientes);
     fclose(fp_turnos);
     fclose(fp_menu);

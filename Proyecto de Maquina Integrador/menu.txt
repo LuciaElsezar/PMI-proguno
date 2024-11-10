@@ -14,9 +14,9 @@
 |11. Mostrar los turnos de algun Tratamiento.        |       \\ )  (\\\\)  -        L_
 |12. Mostrar clientes almacenados.                   |        \|    \  /==    _    JJ \_
 |13. Eliminar un cliente.                            |               \7    \ J=\  JJJ\\ \
-|14. Modificar un turno.                             |                     //JJ\\_J   \\\ )
+|14. Modificar un turno a realizado.                 |                     //JJ\\_J   \\\ )
 |15. Mostrar los turnos no realizados.               |                    ( UU U \UUJ \ \J )
-|0. Salir                                            |                     (  JUU |\ JJU /)
+|0. Salir.                                           |                     (  JUU |\ JJU /)
 | - - - - - - - - - - - -- - - - - - - - - - - - - - |                      \ U/J/  \  UU/
 |>>--------[Practico de maquina integrador]--------<<|                       \ //    \J/
 | - - - - - - - - - - - -- - - - - - - - - - - - - - |                        \/     |/

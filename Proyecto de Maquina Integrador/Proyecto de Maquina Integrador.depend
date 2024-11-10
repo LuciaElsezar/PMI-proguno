@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1731092125 source:c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\main.c
+1731189716 source:c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\main.c
 	<stdio.h>
 	<stdlib.h>
 	<malloc.h>
@@ -8,15 +8,15 @@
 	<conio.h>
 	<math.h>
 
-1731090746 c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\listad_turno.h
+1731166842 c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\listad_turno.h
 	"turno.h"
 	<stdlib.h>
 
-1730676759 c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\turno.h
+1731171772 c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\turno.h
 	<string.h>
 
-1731091165 c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\listae_cliente.h
+1731098889 c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\listae_cliente.h
 	"cliente.h"
 
-1731090327 c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\cliente.h
+1731182709 c:\users\lucia\onedrive\documentos\github\pmi-proguno\proyecto de maquina integrador\cliente.h
 

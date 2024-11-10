@@ -83,6 +83,10 @@ void Set_realizado(Turno* t, int r){
     t -> realizado = r;
 };
 
+void Set_total(Turno* t, float tot){
+	t->total = tot;
+};
+
 //--- Get ------------------------------
 char* Get_id_turno(Turno t){
 char* p;

@@ -48,6 +48,7 @@ if(p==NULL){
     exit(1);
 }
 else{
+	strcpy(p,t.nombre);
     return p;
 };
 };
@@ -59,6 +60,7 @@ if(p==NULL){
     exit(1);
 }
 else{
+	strcpy(p,t.apellido);
     return p;
 };
 };
